@@ -63,6 +63,10 @@ func V7_0_0(db *sqlx.DB, fs stuffbin.FileSystem, ko *koanf.Koanf, lo *log.Logger
         UPDATE settings SET value = JSONB_SET(value, '{verify_email}', 'false'::JSONB)
         WHERE key = 'security.oidc' AND NOT (value ? 'verify_email');
 
+        -- Optional role synchronization on every OIDC login.
+        UPDATE settings SET value = JSONB_SET(value, '{sync_roles_on_login}', 'false'::JSONB)
+        WHERE key = 'security.oidc' AND NOT (value ? 'sync_roles_on_login');
+
         -- OIDC claim mapping.
         UPDATE settings SET value = JSONB_SET(value, '{roles}', '[]'::JSONB)
         WHERE key = 'security.oidc' AND NOT (value ? 'roles');

@@ -8,6 +8,8 @@ Enable **OIDC RP-initiated logout** in Settings → Security to redirect to the 
 ### User auto-creation
 If `Settings -> Security -> OIDC -> Auto-create users` is turned on, when users login via OIDC, an account is auto-created if an existing account is not found (based on the OIDC e-mail ID). If role mapping is enabled, newly created users (on first OIDC login) can be auto-assigned roles mapped to OIDC claims.
 
+Enable **Sync roles on every OIDC login** in Settings → Security → OIDC to also update existing accounts on each successful OIDC login. This works independently of **Auto-create users** and is disabled by default. The first matching claim mapping is applied; omitted roles use the configured defaults. If no mapping matches (including missing claims), both default roles are applied. An empty default list role removes any previous list role. Manual role assignments are overwritten on the next OIDC login. Disabled accounts remain disabled, and an attempt to demote the last active superadmin fails the login. Password logins do not synchronize roles.
+
 # Tutorials
 
 Tutorials for configuring listmonk SSO with popular OIDC providers.

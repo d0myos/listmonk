@@ -135,6 +135,7 @@ type Queries struct {
 	UpdateUser         *sqlx.Stmt `query:"update-user"`
 	UpdateUserProfile  *sqlx.Stmt `query:"update-user-profile"`
 	UpdateUserLogin    *sqlx.Stmt `query:"update-user-login"`
+	UpdateUserRoles    *sqlx.Stmt `query:"update-user-roles"`
 	SetUserTwoFA       *sqlx.Stmt `query:"set-user-twofa"`
 	DeleteUsers        *sqlx.Stmt `query:"delete-users"`
 	GetUsers           string     `query:"get-users"`

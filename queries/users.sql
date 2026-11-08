@@ -47,6 +47,16 @@ UPDATE users SET
     updated_at=NOW()
     WHERE id=$1 AND (SELECT canEdit FROM u) = TRUE;
 
+-- name: update-user-roles
+UPDATE users SET
+    user_role_id=(SELECT id FROM roles WHERE id=$2 AND type='user' AND parent_id IS NULL),
+    list_role_id=(SELECT id FROM roles WHERE id=$3 AND type='list' AND parent_id IS NULL),
+    updated_at=NOW()
+WHERE id=$1 AND (
+    user_role_id != 1 OR status != 'enabled' OR type != 'user' OR $2 = 1
+    OR EXISTS (SELECT 1 FROM users WHERE id != $1 AND status='enabled' AND type='user' AND user_role_id=1)
+);
+
 -- name: delete-users
 WITH u AS (
     SELECT COUNT(*) AS num FROM users WHERE NOT(id = ANY($1)) AND user_role_id=1 AND type='user' AND status='enabled'

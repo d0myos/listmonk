@@ -23,6 +23,7 @@ import (
 	"github.com/knadh/listmonk/internal/auth"
 	"github.com/knadh/listmonk/internal/messenger/email"
 	"github.com/knadh/listmonk/internal/notifs"
+	"github.com/knadh/listmonk/internal/oidc"
 	"github.com/knadh/listmonk/models"
 	"github.com/labstack/echo/v5"
 )
@@ -434,7 +435,7 @@ func (a *App) validateOIDCSettings(set models.Settings) error {
 	if err != nil {
 		return err
 	}
-	if err := validateOIDCSettings(set, userRoles, listRoles); err != nil {
+	if err := oidc.ValidateSettings(set, userRoles, listRoles); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return nil

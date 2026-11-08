@@ -116,6 +116,23 @@ func (c *Core) UpdateUser(id int, u auth.User) (auth.User, error) {
 	return out, err
 }
 
+// UpdateUserRoles updates only a user's roles, preserving credentials and profile fields.
+// A zero listRoleID removes the list role. The last active superadmin cannot be demoted.
+func (c *Core) UpdateUserRoles(id, userRoleID, listRoleID int) (auth.User, error) {
+	res, err := c.q.UpdateUserRoles.Exec(id, userRoleID, listRoleID)
+	if err != nil {
+		return auth.User{}, echo.NewHTTPError(http.StatusInternalServerError,
+			c.i18n.Ts("globals.messages.errorUpdating", "name", "{globals.terms.user}", "error", pqErrMsg(err)))
+	}
+	if n, err := res.RowsAffected(); err != nil {
+		return auth.User{}, err
+	} else if n == 0 {
+		return auth.User{}, echo.NewHTTPError(http.StatusBadRequest, c.i18n.T("users.needSuper"))
+	}
+
+	return c.GetUser(id, "", "")
+}
+
 // UpdateUserProfile updates the basic fields of a given uesr (name, email, password).
 func (c *Core) UpdateUserProfile(id int, u auth.User) (auth.User, error) {
 	res, err := c.q.UpdateUserProfile.Exec(id, u.Name, u.Email, u.PasswordLogin, u.Password)

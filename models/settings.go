@@ -3,7 +3,7 @@ package models
 import "gopkg.in/volatiletech/null.v6"
 
 // OIDCRoleMapping maps an exact OIDC claim value to the roles assigned
-// when an OIDC user is automatically created.
+// when an OIDC user is automatically created or logs in with role synchronization enabled.
 type OIDCRoleMapping struct {
 	Claim      string `json:"claim" koanf:"claim"`
 	Match      string `json:"match" koanf:"match"`
@@ -71,6 +71,7 @@ type Settings struct {
 		ClientID          string            `json:"client_id"`
 		ClientSecret      string            `json:"client_secret"`
 		AutoCreateUsers   bool              `json:"auto_create_users"`
+		SyncRolesOnLogin  bool              `json:"sync_roles_on_login"`
 		DefaultUserRoleID null.Int          `json:"default_user_role_id"`
 		DefaultListRoleID null.Int          `json:"default_list_role_id"`
 		Roles             []OIDCRoleMapping `json:"roles"`
